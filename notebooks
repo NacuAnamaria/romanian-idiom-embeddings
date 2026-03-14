@@ -4,7 +4,7 @@
   "metadata": {
     "colab": {
       "provenance": [],
-      "authorship_tag": "ABX9TyOrmRhF1zTeggT6xexf55pF",
+      "authorship_tag": "ABX9TyMpRgIWH8l1v3LItAMNIV/T",
       "include_colab_link": true
     },
     "kernelspec": {
@@ -23,7 +23,7 @@
         "colab_type": "text"
       },
       "source": [
-        "<a href=\"https://colab.research.google.com/github/NacuAnamaria/romanian-idiom-embeddings/blob/main/preprocessing.ipynb\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+        "<a href=\"https://colab.research.google.com/github/NacuAnamaria/romanian-idiom-embeddings/blob/main/notebooks\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
       ]
     },
     {
@@ -69,7 +69,7 @@
         "import re\n",
         "\n",
         "# load dataset\n",
-        "df = pd.read_excel("../data/romanian_idioms_dataset.xlsx")\n",
+        "df = pd.read_excel(\"data/romanian_idioms_dataset.xlsx\")\n",
         "df.head()\n",
         "\n",
         "# lowercase\n",
