@@ -1,0 +1,96 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyMpRgIWH8l1v3LItAMNIV/T",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/NacuAnamaria/romanian-idiom-embeddings/blob/main/preprocessing\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "Wp8MPWdxGU98",
+        "outputId": "b2c7d46a-d811-4074-e042-6252ea5a590e"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "    id            expression                  figurative_meaning    tip  \\\n",
+            "0  1.0  a da cu bâta-n baltă  a face o gafă; a strica o situație  idiom   \n",
+            "1  2.0     a bate apa-n piuă       a repeta inutil același lucru  idiom   \n",
+            "2  3.0         a freca menta         a pierde vremea; a trândăvi  idiom   \n",
+            "3  4.0    a pune paie pe foc                a agrava un conflict  idiom   \n",
+            "4  5.0    a o lua pe arătură    a devia de la subiect; a exagera  idiom   \n",
+            "\n",
+            "  opacity                                   context_sentence  \\\n",
+            "0       4  în ședință, a dat cu bâta-n baltă și a supărat...   \n",
+            "1       4    de o oră bate apa-n piuă și nu spune nimic nou.   \n",
+            "2       5  în loc să freci menta, mai bine termini raportul.   \n",
+            "3       3  comentariul lui a pus paie pe foc într-o discu...   \n",
+            "4       4  când a început cu teoriile lui, a luat-o pe ar...   \n",
+            "\n",
+            "       expression_clean                       tokens  length  \n",
+            "0  a da cu bâta n baltă  [a, da, cu, bâta, n, baltă]       6  \n",
+            "1     a bate apa n piuă      [a, bate, apa, n, piuă]       5  \n",
+            "2         a freca menta            [a, freca, menta]       3  \n",
+            "3    a pune paie pe foc     [a, pune, paie, pe, foc]       5  \n",
+            "4    a o lua pe arătură     [a, o, lua, pe, arătură]       5  \n"
+          ]
+        }
+      ],
+      "source": [
+        "import pandas as pd\n",
+        "import re\n",
+        "\n",
+        "# load dataset\n",
+        "df = pd.read_excel(\"data/romanian_idioms_dataset.xlsx\")\n",
+        "df.head()\n",
+        "\n",
+        "# lowercase\n",
+        "df[\"expression\"] = df[\"expression\"].str.lower()\n",
+        "df[\"context_sentence\"] = df[\"context_sentence\"].str.lower()\n",
+        "\n",
+        "# remove punctuation\n",
+        "def clean_text(text):\n",
+        "    text = text.replace(\"-\", \" \")\n",
+        "    return re.sub(r\"[^\\w\\săâîșț]\", \"\", text)\n",
+        "\n",
+        "df[\"expression_clean\"] = df[\"expression\"].apply(clean_text)\n",
+        "\n",
+        "# tokenize\n",
+        "df[\"tokens\"] = df[\"expression_clean\"].apply(lambda x: x.split())\n",
+        "\n",
+        "# number of tokens\n",
+        "df[\"length\"] = df[\"tokens\"].apply(len)\n",
+        "\n",
+        "print(df.head())"
+      ]
+    }
+  ]
+}
