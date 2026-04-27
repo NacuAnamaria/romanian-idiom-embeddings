@@ -1,119 +1,173 @@
-# romanian-idiom-embeddings
-Romanian Idiom Embeddings – Analyzing the Representation of Figurative Meaning in Romanian using Distributional Models
 # Romanian Idiom Embeddings
 
-## Overview
+## 📌 Overview
 
-This project explores how modern NLP embedding models represent **figurative language in Romanian**, focusing on **idiomatic expressions and figures of speech**.
+This project investigates the representation of Romanian idiomatic expressions and figurative language using distributed semantic models.
 
-The main goal is to investigate whether semantic representations produced by transformer-based models capture the **figurative meaning of idioms** or remain closer to their **literal word composition**.
+The main objective is to analyze how modern embedding models capture the meaning of idiomatic expressions, and to evaluate the relationship between:
 
-To achieve this, the project constructs a **small annotated corpus of Romanian idioms**, extracts sentence embeddings using multilingual transformer models, and compares the embedding of the entire idiom with the embeddings of its individual components.
+* full idiomatic expressions
+* their component words
+* their figurative meanings
+* their contextual usage
 
-The work aims to contribute both:
-
-* a **small curated resource of Romanian idiomatic expressions**, and
-* a **simple methodology for analyzing figurative meaning in distributional semantic models**.
+The study also explores the concept of **idiomatic opacity** and whether it can be approximated using embedding-based methods.
 
 ---
 
-## Research Objective
+## 🎯 Research Objectives
 
-The project evaluates how well distributed semantic representations capture **non-compositional meaning**.
+* Build a manually annotated dataset of Romanian idiomatic expressions
+* Compare embeddings of full expressions vs component words
+* Estimate idiomatic opacity automatically using similarity measures
+* Evaluate similarity between expressions and their figurative meanings
+* Compare multiple models:
 
-Specifically, it tests whether the embedding of a full idiomatic expression differs significantly from the average embedding of its component words.
+  * SentenceTransformer (multilingual MiniLM)
+  * XLM-RoBERTa
+  * Romanian BERT
 
-Example idiom:
+---
+
+## 📊 Dataset
+
+The dataset consists of **330 Romanian idiomatic expressions**, each annotated with:
+
+* `expression` – the idiomatic expression
+* `figurative_meaning` – a short paraphrase
+* `opacity` – manual score (semantic transparency vs opacity)
+* `type` – expression type
+* `context_sentence` – example usage
+
+This dataset serves both as:
+
+* an experimental resource
+* a contribution to Romanian NLP resources
+
+---
+
+## 🧠 Methods
+
+### 1. Compositionality Analysis
+
+* Compare embedding of full expression vs mean embedding of component words
+* Hypothesis:
+
+  * higher similarity → more compositional (transparent)
+  * lower similarity → more idiomatic (opaque)
+
+---
+
+### 2. Automatic Opacity Estimation
+
+* Defined as:
 
 ```
-"a da cu bâta-n baltă"
-figurative meaning: "a face o gafă"
+opacity = 1 - similarity(expression, component_mean)
 ```
 
-If the embedding of the full expression diverges strongly from the mean embedding of the words, this may indicate that the model captures **idiomatic meaning beyond literal composition**.
+* Compared with manually annotated opacity using:
+
+  * Pearson correlation
+  * Spearman correlation
 
 ---
 
-## Methodology
+### 3. Expression vs Figurative Meaning
 
-### 1. Corpus Creation
-
-A dataset of approximately **100–200 Romanian idioms and figurative expressions** is collected and manually annotated.
-
-Each entry includes:
-
-* the idiomatic expression
-* its component words
-* a short figurative meaning description
-* optional linguistic notes
-
-Example dataset format:
-
-| id | expression           | components                    | figurative_meaning | type  |
-| -- | -------------------- | ----------------------------- | ------------------ | ----- |
-| 1  | a da cu bâta-n baltă | a da | cu | bâta | în | baltă | a face o gafă      | idiom |
-| 2  | a freca menta        | a freca | menta               | a pierde timpul    | idiom |
+* Measure similarity between idiom and its paraphrase
+* Evaluate against a **random baseline**
 
 ---
 
-### 2. Embedding Extraction
+### 4. Contextual Analysis
 
-Sentence embeddings are extracted using multilingual transformer models:
-
-* `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`
-* `xlm-roberta-base` (contextual representation)
-
-Embeddings are computed for:
-
-1. the **full idiomatic expression**
-2. each **individual word component**
+* Compare expression embedding with its context sentence
 
 ---
 
-### 3. Similarity Analysis
+### 5. Model Comparison
 
-For each expression:
-
-1. Compute the **embedding of the full expression**
-2. Compute embeddings for each component word
-3. Calculate the **average embedding of the components**
-4. Measure **cosine similarity** between:
-
-   * full expression embedding
-   * mean component embedding
-
-This allows us to evaluate **how compositional the representation is**.
+* SentenceTransformer (semantic similarity optimized)
+* XLM-RoBERTa (multilingual transformer)
+* Romanian BERT (language-specific model)
 
 ---
 
-### 4. Interpretation
+## 📈 Key Findings
 
-The results are analyzed to determine:
-
-* whether idiomatic expressions are treated compositionally
-* whether models capture figurative meaning
-* differences between sentence-transformer embeddings and contextual transformer embeddings
-
----
-
-## Expected Results
-
-The project produces:
-
-* an **annotated corpus of Romanian idioms**
-* similarity scores between idioms and component words
-* visualizations of semantic similarity distributions
-* observations about **the ability of transformer models to represent figurative language**
+* SentenceTransformer captures **partial semantic relationships** between idioms and their meanings
+* Automatic opacity estimation based only on component similarity is **weak**
+* Expression–meaning similarity is higher than random baseline → model captures some meaning
+* Romanian BERT shows **moderate sensitivity to opacity**
+* XLM-RoBERTa performs poorly in this setup (near-constant similarity values)
 
 ---
 
-## Contribution
+## ⚠️ Limitations
 
-This project contributes:
+* Idiomatic meaning is **non-compositional**, making it difficult to model
+* Tokenization is simple (whitespace-based)
+* Transformer models used are not optimized for sentence similarity (except SentenceTransformer)
+* Figurative language is underrepresented in training data
 
-* a **small linguistic resource for Romanian idiomatic expressions**
-* an **experimental framework for evaluating figurative meaning in embedding models**
-* insights into the **limitations of distributional semantics for non-compositional language**
+---
 
-Master's Dissertation Project
-Natural Language Processing / Computational Linguistics
+## 🚀 How to Run
+
+1. Open the notebook in Google Colab
+2. Upload the dataset file
+3. Run all cells
+
+---
+
+## 📦 Dependencies
+
+```
+sentence-transformers
+scikit-learn
+pandas
+numpy
+matplotlib
+seaborn
+transformers
+torch
+scipy
+openpyxl
+```
+
+---
+
+## 📁 Project Structure
+
+```
+romanian-idiom-embeddings/
+│
+├── data/
+│   └── romanian_idioms_dataset.xlsx
+│
+├── notebooks/
+│   └── romanian_idiom_embeddings_analysis.ipynb
+│
+├── results/
+│   └── romanian_idioms_results.xlsx
+│
+└── README.md
+```
+
+---
+
+## 📝 Conclusion
+
+The results show that modern embedding models can capture some aspects of Romanian idiomatic meaning, but remain limited in representing semantic opacity and non-compositional expressions.
+
+This project highlights both:
+
+* the **potential** of distributed models
+* and their **limitations** in handling figurative language
+
+---
+
+## 👩‍🎓 Author
+
+Dissertation project on Romanian figurative language and NLP.
